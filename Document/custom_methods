@@ -1,0 +1,29 @@
+        def run_before_save_methods(self):
+                if getattr(self, "ignore_validate", False):
+                        return
+
+                if self._action=="save":
+                        self.run_method("validate")
+                        self.run_method("before_save")
+                elif self._action=="submit":
+                        self.run_method("validate")
+                        self.run_method("before_submit")
+                elif self._action=="cancel":
+                        self.run_method("before_cancel")
+                elif self._action=="update_after_submit":
+                        self.run_method("before_update_after_submit")
+
+        def run_post_save_methods(self):
+                if self._action=="save":
+                        self.run_method("on_update")
+                elif self._action=="submit":
+                        self.run_method("on_update")
+                        self.run_method("on_submit")
+                        self.add_comment("Submitted")
+                elif self._action=="cancel":
+                        self.run_method("on_cancel")
+                        self.check_no_back_links_exist()
+                        self.add_comment("Cancelled")
+                elif self._action=="update_after_submit":
+                        self.run_method("on_update_after_submit")
+
