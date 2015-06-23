@@ -1,0 +1,9 @@
+add these changes to file 
+# /home/erpnext/frappe-bench/apps/frappe/frappe/desk/form/save.py
+
+# rm /home/erpnext/frappe-bench/apps/frappe/frappe/desk/form/save.pyc
+
+then restart service
+
+# service supervisor restart
+# service nginx restart

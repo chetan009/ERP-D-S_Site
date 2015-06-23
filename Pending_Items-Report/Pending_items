@@ -1,0 +1,55 @@
+ event                   Doctype      From Doctype                 Pending-Items
+===============================================================
+ validate (Quotation)   Quotation    => Quotation          pending_quanity = quotation_details[i].qty     
+
+ on_cancel(sales order) Quotation    => Sales Order        data['quotation_details'][k]['pending_quantity'] - = quotations[k].qty
+
+ on_submit (sales oder) Sales Order  => DN                 sales_order_details[k].pending_quantity =  sales_order_details[k].qty -  
+                                                                    sales_order_details[k].delivered_qty
+validate (Sales Order)  Sales Order  => Sales Order        sales_order_details[k].pending_quantity =
+                                                              this.cur_frm.doc.sales_order_details[k].qty -
+                                              	                    this.cur_frm.doc.sales_order_details[k].delivered_qty
+
+on_cancel(DN)          SO            => DN                SO['sales_order_details'][k]['pending_quantity']= SO_details[k]['qty'] - 
+                                                                                       SO_details[k]['delivered_qty'];
+
+on_submit(DN)          DN            => DN                SO_details = SO['sales_order_details'];
+                                                           SO['sales_order_details'][k]['pending_quantity']= SO_details[k]['qty'] -
+                                                                                       SO_details[k]['delivered_qty'];
+
+on_validate(DN)        DN           => SI                delivery_note_details[k].si_pending_quantity =
+                                                             this.cur_frm.doc.delivery_note_details[k].qty;
+
+on_submit(SI)          DN           => SI               data['delivery_note_details'][k]['si_pending_quantity']=
+                                                            data['delivery_note_details'][k]['si_pending_quantity']
+                                                               - so_qty[ data['delivery_note_details'][k]['item_code'] ] ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ select DISTINCT SO.parent,  (SO.qty - SO.delivered_qty) as SO_pending_qty, (SO.delivered_qty * 100/SO.qty) as SO_percent, Qo.parent, (Qo.qty - SO.qty) as Qo_pending_qty  from  `tabQuotation Item` as Qo INNER JOIN `tabSales Order Item` as SO ON Qo.parent = SO.prevdoc_docname AND SO.item_code = Qo.item_code AND SO.docstatus != 2 AND Qo.docstatus != 2;
+
+select DISTINCT SO.parent as SO_name,  (SO.qty - SO.delivered_qty) as SO_pending_qty, SO.qty as SO_qty, Qo.parent as Qo_name, (Qo.qty - SO.qty) as Qo_pending_qty, Qo.qty as Qo_qty, Qo.item_code  from  `tabQuotation Item` as Qo INNER JOIN `tabSales Order Item` as SO ON Qo.parent = SO.prevdoc_docname AND SO.item_code = Qo.item_code AND SO.docstatus != 2 AND Qo.docstatus != 2 AND Qo.parent="QTN-01955-2";
+
+
+FINAL Query 
+============	
+select DISTINCT SO.parent as SO_name,  (SO.qty - SO.delivered_qty) as SO_pending_qty, SO.qty as SO_qty, Qo.parent as Qo_name, (Qo.qty - SO.qty) as Qo_pending_qty, Qo.qty as Qo_qty, Qo.item_code  from  `tabQuotation Item` as Qo INNER JOIN `tabSales Order Item` as SO ON Qo.parent = SO.prevdoc_docname AND SO.item_code = Qo.item_code AND SO.docstatus != 2 AND Qo.docstatus != 2 AND  (Qo.qty - SO.qty) >= 0;
+
+
+
+select DISTINCT SO.parent as SO_name,  (SO.qty - SO.delivered_qty) as SO_pending_qty, (SO.qty - DN.qty) as SO_pending, Qo.parent as Qo_name, (Qo.qty - SO.qty) as Qo_pending_qty, Qo.item_code  from  `tabQuotation Item` as Qo INNER JOIN `tabSales Order Item` as SO ON Qo.parent = SO.prevdoc_docname AND SO.item_code = Qo.item_code AND SO.docstatus != 2 AND Qo.docstatus != 2 AND  (Qo.qty - SO.qty) >= 0 INNER JOIN `tabDelivery Note Item` as DN ON DN.against_sales_order = SO.parent AND SO.item_code = Qo.item_code AND DN.docstatus != 2 AND (SO.qty - DN.qty) > 0;
+
+
+select DISTINCT SO.parent as SO_name,  (SO.qty - SO.delivered_qty) as SO_pending_qty,  Qo.parent as Qo_name, (Qo.qty - SO.qty) as Qo_pending_qty,DN.parent, Qo.item_code  from  `tabQuotation Item` as Qo INNER JOIN `tabSales Order Item` as SO ON Qo.parent = SO.prevdoc_docname AND SO.item_code = Qo.item_code AND SO.docstatus != 2 AND Qo.docstatus != 2 AND  (Qo.qty - SO.qty) > 0 INNER JOIN `tabDelivery Note Item` as DN ON DN.against_sales_order = SO.parent AND SO.item_code = Qo.item_code AND DN.docstatus != 2 AND (SO.qty - DN.qty) > 0;
+

@@ -1,0 +1,58 @@
+(anonymous function) (desk.min.js:formatted:8351)
+n.event.dispatch (jquery.min.js:formatted:1166)
+$event.dispatch (report.min.js:189)
+n.event.add.r.handle (jquery.min.js:formatted:1125)
+
+=============================================================
+n.ajaxTransport.k.cors.a.crossDomain.send.b (jquery.min.js:formatted:2174)
+XMLHttpRequest.send (async)
+n.ajaxTransport.k.cors.a.crossDomain.send (jquery.min.js:formatted:2179)
+n.extend.ajax (jquery.min.js:formatted:2059)
+frappe.request.call (desk.min.js:formatted:5822)
+frappe.call (desk.min.js:formatted:5781)
+_call (form.min.js:formatted:1237)
+cancel (form.min.js:formatted:1171)
+frappe.ui.form.save (form.min.js:formatted:1244)
+(anonymous function) (form.min.js:formatted:499)
+n.Callbacks.j (jquery.min.js:formatted:850)
+n.Callbacks.k.add (jquery.min.js:formatted:863)
+(anonymous function) (form.min.js:formatted:484)
+frappe.ui.Dialog.primary_action (desk.min.js:formatted:5676)
+(anonymous function) (desk.min.js:formatted:8350)
+n.event.dispatch (jquery.min.js:formatted:1166)
+$event.dispatch (report.min.js:189)
+n.event.add.r.handle (jquery.min.js:formatted:1125)
+
+
+
+--------------------------------------------------------------------
+i (desk.min.js:formatted:236)
+setTimeout (async)
+e.Widget._delay (desk.min.js:formatted:240)
+e.widget.collapseAll (desk.min.js:formatted:510)
+(anonymous function) (desk.min.js:formatted:162)
+e.widget._create._on.click (desk.min.js:formatted:430)
+r (desk.min.js:formatted:227)
+n.event.dispatch (jquery.min.js:formatted:1166)
+$event.dispatch (report.min.js:189)
+n.event.add.r.handle (jquery.min.js:formatted:1125)
+
+=-==============================================================
+n.ajaxTransport.k.cors.a.crossDomain.send.b (jquery.min.js:formatted:2175)
+XMLHttpRequest.send (async)
+n.ajaxTransport.k.cors.a.crossDomain.send (jquery.min.js:formatted:2179)
+n.extend.ajax (jquery.min.js:formatted:2059)
+(anonymous function) (VM10006:830)
+(anonymous function) (form.min.js:formatted:1296)
+(anonymous function) (form.min.js:formatted:1288)
+n.extend.map (jquery.min.js:formatted:109)
+frappe.ui.form.ScriptManager.Class.extend.trigger (form.min.js:formatted:1287)
+(anonymous function) (form.min.js:formatted:484)
+frappe.ui.Dialog.primary_action (desk.min.js:242)
+(anonymous function) (desk.min.js:610)
+n.event.dispatch (jquery.min.js:formatted:1166)
+$event.dispatch (report.min.js:189)
+n.event.add.r.handle (jquery.min.js:formatted:1125)
+
+jquery.min.js 2167
+

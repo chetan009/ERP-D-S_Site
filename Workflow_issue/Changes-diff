@@ -1,0 +1,16 @@
+ubuntuv5@ubuntu-V5:~/frappe-bench/apps/frappe/frappe$ git diff desk/form/save.py
+diff --git a/frappe/desk/form/save.py b/frappe/desk/form/save.py
+index 7bb9d53..580bbc0 100644
+--- a/frappe/desk/form/save.py
++++ b/frappe/desk/form/save.py
+@@ -35,7 +35,10 @@ def savedocs():
+ def cancel(doctype=None, name=None):
+        """cancel a doclist"""
+        try:
++                #print "SAVE.cancel ====chetan ===="
+                doc = frappe.get_doc(doctype, name)
++                if doc.workflow_state and doc.workflow_state == "SO Processed":
++                    doc.workflow_state = "Cancelled"
+                doc.cancel()
+                send_updated_docs(doc)
+

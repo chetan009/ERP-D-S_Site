@@ -1,0 +1,77 @@
+SELECT  DISTINCT
+        T1.lead AS "Lead:Link/Lead:50",
+        T1.opt AS "Opportunity:Link/Opportunity:100",
+        T1.qo AS "Quotation:Link/Quotation:100",
+        T1.so AS "Sales Order:Link/Sales Order:100",
+        T1.dn AS "Delivery Note:Link/Delivery Note:100",
+        T1.si AS "Sales Invoice:Link/Sales Invoice:100",
+           T2.po AS "Purchase Order:Link/Purchase Order:100",
+           T2.pi AS "Purchase Invoice:Link/Purchase Invoice:100",
+           T2.pr AS "Purchase Receipt:Link/Purchase Receipt:100",
+           T1.receipt AS "Receipt:100",
+           T2.voucher AS "Bank Voucher:100"
+FROM (
+	SELECT  DISTINCT
+	       br.lead AS lead,
+	       br.opt AS opt,
+	       br.qo AS qo,
+	       br.so AS so,
+	       br.dn AS dn,
+	       br.si AS si,
+	       je.parent AS receipt
+	FROM 
+	    (
+	       SELECT  DISTINCT
+		   S1.lead AS lead,
+		   S1.opt AS opt,
+		   S1.qo AS qo,
+		   S1.so AS so,
+		   d.parent as dn,
+		   si.parent as si
+	       FROM
+		   (( SELECT  DISTINCT
+			   o.lead as lead,
+			   o.name as opt,
+			   q.parent as qo,
+			   s.parent as so
+		    FROM `tabOpportunity` as o LEFT JOIN
+		    `tabQuotation Item`  as q  ON o.name = q.prevdoc_docname LEFT JOIN
+		    `tabSales Order Item` as s ON q.parent = s.prevdoc_docname, 
+		    `tabSales Order` AS so  where so.name = s.parent AND so.status <> "Cancelled" 
+		    ) UNION 
+		    ( SELECT  DISTINCT
+			   o.lead as lead,
+			   o.name as opt,
+			   q.parent as qo,
+			   s.parent as so
+		    FROM `tabOpportunity` as o LEFT JOIN
+		    `tabQuotation Item`  as q  ON o.name = q.prevdoc_docname  RIGHT JOIN
+		    `tabSales Order Item` as s ON q.parent = s.prevdoc_docname, 
+		    `tabSales Order` AS so  where so.name = s.parent AND so.status <> "Cancelled"
+		    ) 
+		    ) AS S1  LEFT JOIN 
+		    `tabDelivery Note Item` as d ON d.against_sales_order = S1.so LEFT JOIN
+		    `tabSales Invoice Item` as si ON si.sales_order = S1.so 
+             ) AS br LEFT JOIN
+	     `tabJournal Entry Account` AS je ON je.against_sales_order = br.so OR
+		         	      je.against_invoice = br.si
+         ) AS T1 LEFT JOIN
+	 ( SELECT DISTINCT
+			   b.po AS po,
+			   b.pi AS pi,
+			   b.pr AS pr,
+			   b.mr_so AS mr_so,
+			   je.parent AS voucher
+		   FROM 
+		       ( SELECT DISTINCT
+			      po.parent as po,
+			      pi.parent as pi,
+			      pi.purchase_receipt as pr,
+			      mr.sales_order_no as mr_so
+		         from `tabMaterial Request Item` as mr LEFT JOIN
+		              `tabPurchase Order Item` as po ON po.prevdoc_docname = mr.parent LEFT JOIN
+		              `tabPurchase Invoice Item` as pi ON pi.purchase_order = po.parent
+                       ) AS b LEFT JOIN
+		    `tabJournal Entry Account` AS je ON je.against_purchase_order = b.po OR 
+							je.against_voucher = b.pi
+          ) as T2 ON T1.so = T2.mr_so;

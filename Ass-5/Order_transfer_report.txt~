@@ -1,0 +1,27 @@
+SET @row_no :=0; select DISTINCT  o.lead, o.name, q.parent, s.parent, d.parent
+from `tabOpportunity` as o INNER JOIN 
+`tabQuotation Item`  as q  INNER JOIN 
+`tabSales Order Item` as s INNER JOIN 
+`tabDelivery Note Item` as d INNER JOIN
+`tabSales Invoice Item` as si 
+ON o.name = q.prevdoc_docname AND 
+q.parent = s.prevdoc_docname AND 
+d.against_sales_order = s.parent AND
+si.sales_order = s.parent;
+
+
+
+---------------------------------------
+select  DISTINCT
+        o.lead as "Lead:Link/Lead:50",
+        o.name as "Opportunity:Link/Opportunity:100",
+        q.parent as "Quotation:Link/Quotation:100",
+        s.parent as "Sales Order:Link/Sales Order:100",
+        d.parent as "Delivery Note:Link/Delivery Note:100",
+        si.parent as "Sales Invoice:Link/Sales Invoice:100" 
+from `tabOpportunity` as o LEFT JOIN 
+`tabQuotation Item`  as q   ON o.name = q.prevdoc_docname LEFT JOIN 
+`tabSales Order Item` as s ON q.parent = s.prevdoc_docname LEFT JOIN
+`tabDelivery Note Item` as d ON d.against_sales_order = s.parent LEFT JOIN
+`tabSales Invoice Item` as si ON si.sales_order = s.parent;
+
